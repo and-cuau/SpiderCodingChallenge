@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import type { FormEvent } from "react";
-
+import PhoneInput from 'react-phone-number-input'
 
 function Form() {
   const firstNameRef = useRef<HTMLInputElement>(null);
@@ -12,7 +12,7 @@ function Form() {
   const [actualValue, setActualValue] = useState<string>("");
   const [displayValue, setDisplayValue] = useState<string>("");
   const [pin] = useState<string>("");
-
+  const [isActive, setIsActive] = useState(false);
 
   const createMaskedDisplay = (value: string): string => {
     const digits = value.replace(/\D/g, "");
@@ -20,6 +20,19 @@ function Form() {
     const masked = maskPin(digits);
     return masked;
   };
+
+  const submitStyle: React.CSSProperties = {
+    marginTop: "1.5rem",
+    backgroundColor: isActive ? "rgba(0, 0, 0, 0.5)" : "rgba(255, 255, 255, 0.0)",
+    color: "white",
+    border: "1px solid #121212",
+    padding: "0.75rem 1.5rem",
+    borderRadius: "0",
+    fontSize: "1rem",
+    cursor: "pointer",
+    transition: "background-color 0.3s ease",
+  };
+
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (
@@ -138,7 +151,14 @@ function Form() {
             />
             <p style={styles.pinPreview}>{}</p>
 
-            <button style={styles.submit}>Submit</button>
+             <button
+      style={submitStyle}
+      onMouseDown={() => setIsActive(true)}
+      onMouseUp={() => setIsActive(false)}
+      onMouseLeave={() => setIsActive(false)}
+    >
+      Submit
+    </button>
           </form>
         </div>
       </div>
@@ -190,17 +210,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     fontSize: "1.0rem",
     width: "100%",
     boxSizing: "border-box",
-  },
-  submit: {
-    marginTop: "1.5rem",
-    backgroundColor: "rgba(255, 255, 255, 0.0)",
-    color: "white",
-    border: "1px solid #121212",
-    padding: "0.75rem 1.5rem",
-    borderRadius: "0",
-    fontSize: "1rem",
-    cursor: "pointer",
-    transition: "background-color 0.3s ease",
-  },
+  }
 };
 
